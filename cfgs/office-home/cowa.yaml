@@ -1,0 +1,25 @@
+MODEL:
+  ARCH: resnet50
+  METHOD: cowa
+SETTING:
+  DATASET: office-home
+  S: 0
+  T: 1
+  SEED: 2020
+  OUTPUT_SRC: source
+OPTIM:
+  METHOD: SGD
+  MOMENTUM: 0.9
+  LR: 0.01
+  WD: 1e-3
+  NESTEROV: TRUE
+TEST:
+  BATCH_SIZE: 64
+  MAX_EPOCH: 30
+  INTERVAL: 30
+COWA:
+  ALPHA: 0.3 
+  WARM: 0.0
+  COEFF: JMDS
+  EPSILON : 1e-5
+  EPSILON2 : 1e-6

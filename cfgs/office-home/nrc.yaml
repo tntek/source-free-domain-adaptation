@@ -1,0 +1,22 @@
+MODEL:
+  ARCH: resnet50
+  METHOD: nrc
+SETTING:
+  DATASET: office-home
+  S: 0
+  T: 1
+  SEED: 2021
+  OUTPUT_SRC: weight_512/seed2021
+OPTIM:
+  METHOD: SGD
+  MOMENTUM: 0.9
+  LR: 0.001
+  WD: 5e-4
+  NESTEROV: TRUE
+TEST:
+  BATCH_SIZE: 64
+  MAX_EPOCH: 40
+  INTERVAL: 15
+NRC:
+  K: 5 
+  KK: 4
