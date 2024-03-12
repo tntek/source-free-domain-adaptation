@@ -7,6 +7,7 @@ This is a source-free domain adaptation repository based on PyTorch. It is also 
 </details>
 
 We encourage contributions! Pull requests to add methods are very welcome and appreciated.
+
 ## Our Publications
 - [**CVPR'24**] [Source-Free Domain Adaptation with Frozen Multimodal Foundation Model](https://arxiv.org/pdf/2402.19122.pdf), and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/difo.py)
 
@@ -19,3 +20,35 @@ We encourage contributions! Pull requests to add methods are very welcome and ap
 - [**NN'22**][Semantic consistency learning on manifold for source data-free unsupervised domain adaptation](https://www.sciencedirect.com/science/article/pii/S0893608022001897) and [*Code*](https://github.com/tntek/SCLM)
 
 - [**IROS'21**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation](https://ieeexplore.ieee.org/abstract/document/9636206) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/gkd.py)
+
+- **Datasets**
+  - `office-31` [Office-31](https://drive.google.com/file/d/0B4IapRTv9pJ1WGZVd1VDMmhwdlE/view?resourcekey=0-gNMHVtZfRAyO_t2_WrOunA)
+  - `office-home` [Office-Home](https://drive.google.com/file/d/0B81rNlvomiwed0V1YUxQdC1uOTg/view)
+  - `VISDA-C` [VISDA-C](https://github.com/VisionLearningGroup/taskcv-2017-public/tree/master/classification)
+  - `domainnet126` [DomainNet (cleaned)](http://ai.bu.edu/M3SDA/)
+  - `imagenet_a` [ImageNet-A](https://github.com/hendrycks/natural-adv-examples)
+  - `imagenet_r` [ImageNet-R](https://github.com/hendrycks/imagenet-r)
+  - `imagenet_v2` [ImageNet-V2](https://huggingface.co/datasets/vaishaal/ImageNetV2/tree/main)
+  - `imagenet_k` [ImageNet-Sketch](https://github.com/HaohanWang/ImageNet-Sketch)
+
+You need to download the above dataset,modify the path of images in each '.txt' under the folder './data/'.In addition, class name files for each dataset also under the folder './data/'.The prepared directory would look like:
+```bash
+├── data
+    ├── office-home
+        ├── amazon_list.txt
+        ├── classname.txt
+        ├── dslr_list.txt
+        ├── webcam_list.txt
+    ├── office-home
+        ├── Art_list.txt
+        ├── classname.txt
+        ├── Clipart_list.txt
+        ├── Product_list.txt
+        ├── RealWorld_list.txt
+    ├── VISDA-C
+        ├── classname.txt
+        ├── train_list.txt
+        ├── validation_list.txt
+    ...  ...
+```
+For the ImageNet variations, modify the `DATA_DIR` in the `conf.py` to your data directory where stores the ImageNet variations datasets.
