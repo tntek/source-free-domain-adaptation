@@ -60,3 +60,7 @@ You need to download the above dataset,modify the path of images in each '.txt' 
     ...  ...
 ```
 For the ImageNet variations, modify the `DATA_DIR` in the `conf.py` to your data directory where stores the ImageNet variations datasets.
+
+- **Methods**
+  - The repository currently supports the following methods: source, [SHOT](http://proceedings.mlr.press/v119/liang20a/liang20a.pdf),
+  [NRC](https://proceedings.neurips.cc/paper_files/paper/2021/file/f5deaeeae1538fb6c45901d524ee2f98-Paper.pdf), [GKD](https://ieeexplore.ieee.org/abstract/document/9636206), [COWA](https://proceedings.mlr.press/v162/lee22c/lee22c.pdf), [TPDS](https://link.springer.com/article/10.1007/s11263-023-01892-w), [DIFO](https://arxiv.org/abs/2311.16510)
