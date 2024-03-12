@@ -1,15 +1,19 @@
 # source-free-domain-adaptation
-This is a source-free domain adaptation repository based on PyTorch. It is also the official repository for the following works:
-- [Source-Free Domain Adaptation with Frozen Multimodal Foundation Model](https://arxiv.org/pdf/2311.16510.pdf) (CVPR2024)
-- [Source-Free Domain Adaptation via Target Prediction Distribution Searching](https://link.springer.com/article/10.1007/s11263-023-01892-w) (IJCV2023)
-- [Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation](https://ieeexplore.ieee.org/abstract/document/9636206)(IROS2021)
+This is an source-free domain adaptation repository based on PyTorch. It is also the official repository for the following works:
+- [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model(DIFO)](https://arxiv.org/pdf/2311.16510.pdf)
+- [**IJCV'23**][Source-Free Domain Adaptation via Target Prediction Distribution Searching(TPDS)](https://link.springer.com/article/10.1007/s11263-023-01892-w)
+- [**IROS2021**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation (GKD)](https://ieeexplore.ieee.org/abstract/document/9636206)
 
+
+This repository is also supports the following methods:
+  - Source, [SHOT](http://proceedings.mlr.press/v119/liang20a/liang20a.pdf),
+  [NRC](https://proceedings.neurips.cc/paper_files/paper/2021/file/f5deaeeae1538fb6c45901d524ee2f98-Paper.pdf), [COWA](https://proceedings.mlr.press/v162/lee22c/lee22c.pdf)
 </details>
 
 We encourage contributions! Pull requests to add methods are very welcome and appreciated.
 
 ## Our Publications
-- [**CVPR'24**] [Source-Free Domain Adaptation with Frozen Multimodal Foundation Model](https://arxiv.org/pdf/2402.19122.pdf), and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/difo.py)
+- [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model](https://arxiv.org/pdf/2402.19122.pdf), and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/difo.py)
 
 - [**IJCV'23**][Source-Free Domain Adaptation via Target Prediction Distribution Searching](https://link.springer.com/article/10.1007/s11263-023-01892-w) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/tpds.py)
 
@@ -19,7 +23,7 @@ We encourage contributions! Pull requests to add methods are very welcome and ap
 
 - [**NN'22**][Semantic consistency learning on manifold for source data-free unsupervised domain adaptation](https://www.sciencedirect.com/science/article/pii/S0893608022001897) and [*Code*](https://github.com/tntek/SCLM)
 
-- [**IROS'21**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation](https://ieeexplore.ieee.org/abstract/document/9636206) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/gkd.py)
+- [**IROS'22**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation](https://ieeexplore.ieee.org/abstract/document/9636206) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/gkd.py)
 
 ## Preliminary
 
@@ -53,14 +57,37 @@ You need to download the above dataset,modify the path of images in each '.txt' 
         ├── Clipart_list.txt
         ├── Product_list.txt
         ├── RealWorld_list.txt
-    ├── VISDA-C
-        ├── classname.txt
-        ├── train_list.txt
-        ├── validation_list.txt
     ...  ...
 ```
-For the ImageNet variations, modify the `DATA_DIR` in the `conf.py` to your data directory where stores the ImageNet variations datasets.
+For the ImageNet variations, modify the `${DATA_DIR}` in the `conf.py` to your data directory where stores the ImageNet variations datasets.
 
-- **Methods**
-  - The repository currently supports the following methods: source, [SHOT](http://proceedings.mlr.press/v119/liang20a/liang20a.pdf),
-  [NRC](https://proceedings.neurips.cc/paper_files/paper/2021/file/f5deaeeae1538fb6c45901d524ee2f98-Paper.pdf), [GKD](https://ieeexplore.ieee.org/abstract/document/9636206), [COWA](https://proceedings.mlr.press/v162/lee22c/lee22c.pdf), [TPDS](https://link.springer.com/article/10.1007/s11263-023-01892-w), [DIFO](https://arxiv.org/abs/2311.16510)
+## Training
+We provide config files for experiments. 
+### Source
+- For office-31, office-home and VISDA-C, there is an example to training a source model :
+```bash
+CUDA_VISIBLE_DEVICES=0 python image_target_of_oh_vs.py --cfg "cfgs/office-home/source.yaml" SETTING.S 0
+```
+- For domainnet126, we follow [AdaContrast](https://github.com/DianCh/AdaContrast) to train the source model.
+
+- For adapting to ImageNet variations, all pre-trained models available in [Torchvision](https://pytorch.org/vision/0.14/models.html) or [timm](https://github.com/huggingface/pytorch-image-models/tree/v0.6.13) can be used.
+
+- We also provide the pre-trained source models which can be downloaded from [here](https://drive.google.com/drive/folders/17n6goPXw_-ERgTK8R8nm4M_8PJPTEK1j?usp=sharing).
+
+### Target
+After obtaining the source models, modify the `${CKPT_DIR}` in the `conf.py` to your source model directory. For office-31, office-home and VISDA-C, simply run the following Python file with the corresponding config file to execute source-free domain adaptation.
+```bash
+CUDA_VISIBLE_DEVICES=0 python image_target_of_oh_vs.py --cfg "cfgs/office-home/difo.yaml" SETTING.S 0 SETTING.T 1
+```
+For domainnet126 and ImageNet variations.
+```bash
+CUDA_VISIBLE_DEVICES=0 python image_target_in_126.py --cfg "cfgs/domainnet126/difo.yaml" SETTING.S 0 SETTING.T 1
+```
+
+## Acknowledgements
++ SHOT [official](https://github.com/tim-learn/SHOT)
++ NRC [official](https://github.com/Albert0147/NRC_SFDA)
++ COWA [official](https://github.com/Jhyun17/CoWA-JMDS)
++ AdaContrast [official](https://github.com/DianCh/AdaContrast)
++ CoOp [official](https://github.com/KaiyangZhou/CoOp)
++ RMT [official](https://github.com/mariodoebler/test-time-adaptation)
