@@ -21,6 +21,14 @@ We encourage contributions! Pull requests to add methods are very welcome and ap
 
 - [**IROS'21**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation](https://ieeexplore.ieee.org/abstract/document/9636206) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/gkd.py)
 
+## Preliminary
+
+To use the repository, we provide a conda environment.
+```bash
+conda update conda
+conda env create -f environment.yml
+conda activate sfa
+```
 - **Datasets**
   - `office-31` [Office-31](https://drive.google.com/file/d/0B4IapRTv9pJ1WGZVd1VDMmhwdlE/view?resourcekey=0-gNMHVtZfRAyO_t2_WrOunA)
   - `office-home` [Office-Home](https://drive.google.com/file/d/0B81rNlvomiwed0V1YUxQdC1uOTg/view)
