@@ -1,4 +1,4 @@
-name: sfa_susu
+name: sfa
 channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
   - https://mirrors.ustc.edu.cn/anaconda/pkgs/main
@@ -299,4 +299,4 @@ dependencies:
     - yacs==0.1.8
     - yapf==0.33.0
     - yarl==1.9.2
-prefix: /home/ts/anaconda3/envs/sfa_susu
+prefix: /home/ts/anaconda3/envs/sfa
