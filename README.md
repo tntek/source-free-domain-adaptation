@@ -1,7 +1,7 @@
 # source-free-domain-adaptation
 This is an source-free domain adaptation repository based on PyTorch. It was developed by Wenxin Su. If you encounter any issues or have questions, please don't hesitate to contact Wenxin at suwenxin43@gmail.com. It is also the official repository for the following works:
 - [**ARXIV'24**][Unified Source-Free Domain Adaptation(LCFD)](https://arxiv.org/abs/2403.07601)
-- [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model(DIFO)](https://arxiv.org/pdf/2311.16510.pdf)
+- [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model(DIFO)](https://arxiv.org/abs/2311.16510v3)
 - [**IJCV'23**][Source-Free Domain Adaptation via Target Prediction Distribution Searching(TPDS)](https://link.springer.com/article/10.1007/s11263-023-01892-w)
 - [**IROS2021**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation (GKD)](https://ieeexplore.ieee.org/abstract/document/9636206)
 
@@ -15,7 +15,7 @@ We encourage contributions! Pull requests to add methods are very welcome and ap
 
 ## Our Publications
 - [**ARXIV'24**][Unified Source-Free Domain Adaptation(LCFD)](https://arxiv.org/abs/2403.07601), and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/lcfd.py)
-- [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model](https://arxiv.org/pdf/2402.19122.pdf), and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/difo.py)
+- [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model](https://arxiv.org/pdf/2402.19122.pdf), [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/difo.py), and [*Chinese version*](https://zhuanlan.zhihu.com/p/687080854)
 
 - [**IJCV'23**][Source-Free Domain Adaptation via Target Prediction Distribution Searching](https://link.springer.com/article/10.1007/s11263-023-01892-w) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/tpds.py)
 
