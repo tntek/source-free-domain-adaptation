@@ -3,6 +3,7 @@ This is an source-free domain adaptation repository based on PyTorch. It was dev
 - [**ARXIV'24**][Unified Source-Free Domain Adaptation(LCFD)](https://arxiv.org/abs/2403.07601)
 - [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model(DIFO)](https://arxiv.org/abs/2311.16510v3)
 - [**IJCV'23**][Source-Free Domain Adaptation via Target Prediction Distribution Searching(TPDS)](https://link.springer.com/article/10.1007/s11263-023-01892-w)
+- [**NN'22**][Semantic consistency learning on manifold for source data-free unsupervised domain adaptation](https://www.sciencedirect.com/science/article/pii/S0893608022001897)
 - [**IROS2021**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation (GKD)](https://ieeexplore.ieee.org/abstract/document/9636206)
 
 
