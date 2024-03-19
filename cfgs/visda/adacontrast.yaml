@@ -1,6 +1,6 @@
 MODEL:
   ARCH: resnet101
-  METHOD: shot
+  METHOD: adacontrast
 SETTING:
   DATASET: VISDA-C
   S: 0
@@ -17,9 +17,12 @@ TEST:
   BATCH_SIZE: 64
   MAX_EPOCH: 15
   INTERVAL: 15
-SHOT:
-  CLS_PAR: 0.3 
-  ENT: TRUE
-  GENT: TRUE
-  EPSILON : 1e-5
-  ENT_PAR : 1.0
+ADACONTRAST:
+  CONTRAST_TYPE: class_aware
+  CE_TYPE: standard
+  ALPHA: 1.0
+  BETA : 1.0
+  ETA : 1.0
+  CE_SUP_TYPE : weak_strong
+  REFINE_METHOD : nearest_neighbors
+  NUM_NEIGHBORS : 10

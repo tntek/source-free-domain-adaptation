@@ -1,25 +1,29 @@
 MODEL:
-  ARCH: resnet101
-  METHOD: shot
+  ARCH: resnet50
+  METHOD: sclm
 SETTING:
-  DATASET: VISDA-C
+  DATASET: imagenet_a
   S: 0
-  T: 1
+  T: 0
   SEED: 2020
   OUTPUT_SRC: source
 OPTIM:
   METHOD: SGD
   MOMENTUM: 0.9
-  LR: 0.001
+  LR: 0.005
   WD: 1e-3
   NESTEROV: TRUE
 TEST:
   BATCH_SIZE: 64
   MAX_EPOCH: 15
   INTERVAL: 15
-SHOT:
-  CLS_PAR: 0.3 
+SCLM:
+  CLS_PAR: 0.1
   ENT: TRUE
   GENT: TRUE
   EPSILON : 1e-5
   ENT_PAR : 1.0
+  CLS_SNT : 0.1
+  NEW_ENT_PAR : 0.3
+  INITC_PAR : 0.3
+  CONFI_PAR : 0.3
