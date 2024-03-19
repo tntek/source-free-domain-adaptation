@@ -24,7 +24,7 @@ We encourage contributions! Pull requests to add methods are very welcome and ap
 
 - [**CAAI TRIT'22**][Model adaptation via credible local context representation](https://ietresearch.onlinelibrary.wiley.com/doi/pdf/10.1049/cit2.12228) and [*Code*](https://github.com/tntek/CLCR)
 
-- [**NN'22**][Semantic consistency learning on manifold for source data-free unsupervised domain adaptation](https://www.sciencedirect.com/science/article/pii/S0893608022001897) and [*Code*](https://github.com/tntek/SCLM)
+- [**NN'22**][Semantic consistency learning on manifold for source data-free unsupervised domain adaptation](https://www.sciencedirect.com/science/article/pii/S0893608022001897) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/sclm.py)
 
 - [**IROS'21**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation](https://ieeexplore.ieee.org/abstract/document/9636206) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/gkd.py)
 
