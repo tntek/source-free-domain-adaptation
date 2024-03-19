@@ -9,7 +9,7 @@ This is an source-free domain adaptation repository based on PyTorch. It was dev
 
 This repository is also supports the following methods:
   - Source, [SHOT](http://proceedings.mlr.press/v119/liang20a/liang20a.pdf),
-  [NRC](https://proceedings.neurips.cc/paper_files/paper/2021/file/f5deaeeae1538fb6c45901d524ee2f98-Paper.pdf), [COWA](https://proceedings.mlr.press/v162/lee22c/lee22c.pdf), [AdaContrast](https://openaccess.thecvf.com/content/CVPR2022/papers/Chen_Contrastive_Test-Time_Adaptation_CVPR_2022_paper.pdf), [PLUE](https://github.com/MattiaLitrico/Guiding-Pseudo-labels-with-Uncertainty-Estimation-for-Source-free-Unsupervised-Domain-Adaptation)
+  [NRC](https://proceedings.neurips.cc/paper_files/paper/2021/file/f5deaeeae1538fb6c45901d524ee2f98-Paper.pdf), [COWA](https://proceedings.mlr.press/v162/lee22c/lee22c.pdf), [AdaContrast](https://openaccess.thecvf.com/content/CVPR2022/papers/Chen_Contrastive_Test-Time_Adaptation_CVPR_2022_paper.pdf), [PLUE](https://openaccess.thecvf.com/content/CVPR2023/papers/Litrico_Guiding_Pseudo-Labels_With_Uncertainty_Estimation_for_Source-Free_Unsupervised_Domain_Adaptation_CVPR_2023_paper.pdf)
 </details>
 
 We encourage contributions! Pull requests to add methods are very welcome and appreciated.
@@ -92,5 +92,6 @@ CUDA_VISIBLE_DEVICES=0 python image_target_in_126.py --cfg "cfgs/domainnet126/di
 + NRC [official](https://github.com/Albert0147/NRC_SFDA)
 + COWA [official](https://github.com/Jhyun17/CoWA-JMDS)
 + AdaContrast [official](https://github.com/DianCh/AdaContrast)
++ PLUE [official](https://github.com/MattiaLitrico/Guiding-Pseudo-labels-with-Uncertainty-Estimation-for-Source-free-Unsupervised-Domain-Adaptation)
 + CoOp [official](https://github.com/KaiyangZhou/CoOp)
 + RMT [official](https://github.com/mariodoebler/test-time-adaptation)
