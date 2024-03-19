@@ -5,11 +5,14 @@ import random
 import time
 import src.methods.net.nrc as NRC
 import src.methods.net.shot as SHOT
+import src.methods.net.sclm as SCLM
 import src.methods.net.cowa as COWA
 import src.methods.net.gkd as GKD
 import src.methods.net.tpds as TPDS
 import src.methods.net.lcfd as LCFD
 import src.methods.net.difo as DIFO
+import src.methods.net.plue as PLUE
+import src.methods.net.adacontrast as ADACONTRAST
 import src.methods.net.source as SOURCE
 from conf import cfg, load_cfg_from_args
 
@@ -30,6 +33,12 @@ if __name__ == "__main__":
     random.seed(cfg.SETTING.SEED)
     torch.backends.cudnn.benchmark = cfg.CUDNN.BENCHMARK
 
+    if cfg.SETTING.DATASET == 'office-home':
+        if cfg.DA == 'pda':
+            cfg.class_num = 65
+            cfg.src_classes = [i for i in range(65)]
+            cfg.tar_classes = [i for i in range(25)]
+
     if cfg.MODEL.METHOD == "nrc":
         print("using nrc method")
         acc = NRC.train_target(cfg)
@@ -37,6 +46,10 @@ if __name__ == "__main__":
     elif cfg.MODEL.METHOD == "shot":
         print("using shot method")
         acc = SHOT.train_target(cfg)
+        
+    elif cfg.MODEL.METHOD == "sclm":
+        print("using sclm method")
+        acc = SCLM.train_target(cfg)
 
     elif cfg.MODEL.METHOD == "cowa":
         print("using cowa method")
@@ -60,6 +73,14 @@ if __name__ == "__main__":
     elif cfg.MODEL.METHOD == "difo":
         print("using difo method")
         acc = DIFO.train_target(cfg)
+
+    elif cfg.MODEL.METHOD == "plue":
+        print("using plue method")
+        acc = PLUE.train_target(cfg)
+
+    elif cfg.MODEL.METHOD == "adacontrast":
+        print("using adacontrast method")
+        acc = ADACONTRAST.train_target(cfg)
 
     elif cfg.MODEL.METHOD == "source":
         print("training source model")
