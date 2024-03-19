@@ -8,6 +8,7 @@
 import argparse
 import os
 import logging
+from pickle import TRUE
 import torch
 from datetime import datetime
 from iopath.common.file_io import g_pathmgr
@@ -150,7 +151,20 @@ _C.SHOT.EPSILON = 1e-5
 _C.SHOT.ENT_PAR = 1.0
 _C.SHOT.THRESHOLD = 0.0
 _C.SHOT.DISTANCE = 'cosine'# ["cosine", "euclidean"]
+# --------------------------------- SCLM options ---------------------------- #
+_C.SCLM = CfgNode()
 
+_C.SCLM.CLS_PAR = 0.3
+_C.SCLM.ENT = True
+_C.SCLM.GENT = True
+_C.SCLM.EPSILON = 1e-5
+_C.SCLM.CLS_SNT = 0.1
+_C.SCLM.ENT_PAR = 1.0
+_C.SCLM.NEW_ENT_PAR = 0.3
+_C.SCLM.DISTANCE = 'cosine'# ["cosine", "euclidean"]
+_C.SCLM.THRESHOLD = 0.0
+_C.SCLM.INITC_PAR = 0.3
+_C.SCLM.CONFI_PAR = 0.3
 # --------------------------------- GKD options ---------------------------- #
 _C.GKD = CfgNode()
 
@@ -161,7 +175,6 @@ _C.GKD.EPSILON = 1e-5
 _C.GKD.ENT_PAR = 1.0
 _C.GKD.THRESHOLD = 0.0
 _C.GKD.DISTANCE = 'cosine'# ["cosine", "euclidean"]
-
 # --------------------------------- TPDS options ---------------------------- #
 _C.TPDS = CfgNode()
 
@@ -179,33 +192,30 @@ _C.COWA.EPSILON = 1e-5
 _C.COWA.EPSILON2 = 1e-6
 _C.COWA.DISTANCE = 'cosine'# ["cosine", "euclidean"]
 _C.COWA.PICKLE = False
-
 # --------------------------------- PLUE options --------------------- #
 _C.PLUE = CfgNode()
 
-_C.PLUE.QUEUE_SIZE = 16384
-_C.PLUE.CONTRAST_TYPE = "class_aware"
-_C.PLUE.CE_TYPE = "standard" # ["standard", "symmetric", "smoothed", "soft"]
-_C.PLUE.ALPHA = 1.0  # lambda for classification loss
-_C.PLUE.BETA = 1.0   # lambda for instance loss
-_C.PLUE.ETA = 1.0    # lambda for diversity loss
-
-_C.PLUE.DIST_TYPE = "cosine" # ["cosine", "euclidean"]
-_C.PLUE.CE_SUP_TYPE = "weak_strong" # ["weak_all", "weak_weak", "weak_strong", "self_all"]
-_C.PLUE.REFINE_METHOD = "nearest_neighbors"
+_C.PLUE.TEMPORAL_LENGTH = 5
+_C.PLUE.LABEL_REFINEMENT = True
+_C.PLUE.CTR = True
+_C.PLUE.EPSILON = 1e-5
+_C.PLUE.NEG_L = True
+_C.PLUE.REWEIGHTING = True
+# _C.PLUE.QUEUE_SIZE = 16384
 _C.PLUE.NUM_NEIGHBORS = 10
-
-
-# ---------------------------------  options --------------------- #
+# ---------------------------------ADACONTRAST  options --------------------- #
 _C.ADACONTRAST = CfgNode()
 
-_C.ADACONTRAST.QUEUE_SIZE = 16384
 _C.ADACONTRAST.CONTRAST_TYPE = "class_aware"
 _C.ADACONTRAST.CE_TYPE = "standard" # ["standard", "symmetric", "smoothed", "soft"]
 _C.ADACONTRAST.ALPHA = 1.0  # lambda for classification loss
 _C.ADACONTRAST.BETA = 1.0   # lambda for instance loss
 _C.ADACONTRAST.ETA = 1.0    # lambda for diversity loss
-
+_C.ADACONTRAST.OPTIM_COS = True
+_C.ADACONTRAST.OPTIM_EXP = False
+_C.ADACONTRAST.FULL_PROGRESS = 0
+_C.ADACONTRAST.SCHEDULE = [10,20]
+_C.ADACONTRAST.GAMMA = 0.2
 _C.ADACONTRAST.DIST_TYPE = "cosine" # ["cosine", "euclidean"]
 _C.ADACONTRAST.CE_SUP_TYPE = "weak_strong" # ["weak_all", "weak_weak", "weak_strong", "self_all"]
 _C.ADACONTRAST.REFINE_METHOD = "nearest_neighbors"
@@ -285,7 +295,7 @@ def load_cfg_from_args():
     """Load config from command line args and set any specified options."""
     current_time = datetime.now().strftime("%y%m%d_%H%M%S")
     parser = argparse.ArgumentParser(description="Evaluate")
-    parser.add_argument("--cfg", dest="cfg_file",default="cfgs/office-home/difo.yaml", type=str,
+    parser.add_argument("--cfg", dest="cfg_file",default="cfgs/imagenet_a/sclm.yaml", type=str,
                         help="Config file location")
     parser.add_argument("opts", default=None, nargs=argparse.REMAINDER,
                         help="See conf.py for all options")
@@ -309,19 +319,22 @@ def load_cfg_from_args():
         cfg.domain = ['amazon', 'dslr', 'webcam']
         cfg.name_file = './data/office/classname.txt'
         cfg.class_num = 31
-
     if cfg.SETTING.DATASET == 'imagenet_a':
         cfg.domain = ['target']
         cfg.class_num = 200
+        cfg.bottleneck = 2048
     if cfg.SETTING.DATASET == 'imagenet_r':
         cfg.domain = ['target']
         cfg.class_num = 200
+        cfg.bottleneck = 2048
     if cfg.SETTING.DATASET == 'imagenet_k':
         cfg.domain = ['target']
         cfg.class_num = 1000
+        cfg.bottleneck = 2048
     if cfg.SETTING.DATASET == 'imagenet_v':
         cfg.domain = ['target']
         cfg.class_num = 1000
+        cfg.bottleneck = 2048
     if cfg.SETTING.DATASET == 'domainnet126':
         cfg.domain = ["clipart", "painting", "real", "sketch"]
         cfg.name_file = './data/domainnet126/classname.txt'
