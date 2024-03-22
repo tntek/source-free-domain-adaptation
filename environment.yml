@@ -96,7 +96,6 @@ dependencies:
   - xz=5.2.5=h7b6447c_0
   - zeromq=4.3.4=h2531618_0
   - zipp=3.8.0=py37h06a4308_0
-  - zlib=1.2.11=0
   - pip
   - pip:
     - absl-py==1.4.0
