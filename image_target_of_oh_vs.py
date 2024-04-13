@@ -12,6 +12,8 @@ import src.methods.oh.tpds as TPDS
 import src.methods.oh.nrc_vs as Nrc_vs
 import src.methods.oh.lcfd as LCFD
 import src.methods.oh.difo as DIFO
+import src.methods.oh.difo_50 as DIFO_50
+
 import src.methods.oh.plue as PLUE
 import src.methods.oh.adacontrast as ADACONTRAST
 import src.methods.oh.source as SOURCE
@@ -77,7 +79,10 @@ if __name__ == "__main__":
 
     elif cfg.MODEL.METHOD == "difo":
         print("using difo method")
-        acc = DIFO.train_target(cfg)
+        if 'RN' in cfg.DIFO.ARCH:
+            acc = DIFO_50.train_target(cfg)
+        else:
+            acc = DIFO.train_target(cfg)
 
     elif cfg.MODEL.METHOD == "plue":
         print("using plue method")
