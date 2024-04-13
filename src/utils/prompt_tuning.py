@@ -31,6 +31,17 @@ def image_test(resize_size=256, crop_size=224, alexnet=False):
         normalize
     ])
 
+def image_test_50(resize_size=256, crop_size=224, alexnet=False):
+    normalize = transforms.Normalize(mean=(0.48145466, 0.4578275, 0.40821073),
+                                std=[0.26862954, 0.26130258, 0.27577711])
+                            
+    return transforms.Compose([
+            transforms.Resize(crop_size, interpolation=Image.BICUBIC),
+            transforms.CenterCrop(crop_size),
+            transforms.ToTensor(),
+            normalize
+        ])
+
 def test_time_tuning(model, inputs,pesu_label, optimizer, cfg):
     for j in range(cfg.DIFO.TTA_STEPS):
         with torch.cuda.amp.autocast():
@@ -72,13 +83,19 @@ def main_worker(cfg,confi_imag,confi_dis):
             param.requires_grad_(False)
 
     trainable_param = model.prompt_learner.parameters()
-    optimizer = torch.optim.SGD(trainable_param, cfg.OPTIM.LR,weight_decay=5e-4,momentum=0.9,nesterov=False)
+    if 'RN' in cfg.DIFO.ARCH :
+        prompt_lr = cfg.OPTIM.LR*0.1
+        data_transform = image_test_50()
+    else :
+        data_transform = image_test()
+        prompt_lr = cfg.OPTIM.LR
+
+    optimizer = torch.optim.SGD(trainable_param, prompt_lr,weight_decay=5e-4,momentum=0.9,nesterov=False)
     optim_state = deepcopy(optimizer.state_dict())
     cudnn.benchmark = True
     set_id = 'sfuda'
     model.reset_classnames(classnames, cfg.DIFO.ARCH)
-    
-    data_transform = image_test()
+
     val_dataset = build_dataset(set_id, data_transform,confi_imag,confi_dis,cfg.DATA_DIR,cfg.domain_name,mode='test')
     batchsize = cfg.TEST.BATCH_SIZE
     val_loader = torch.utils.data.DataLoader(
