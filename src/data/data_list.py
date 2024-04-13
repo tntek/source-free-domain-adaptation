@@ -133,25 +133,21 @@ class ImageList_idx_aug(Dataset):
 
 class ImageList_idx_aug_fix(Dataset):
     def __init__(self, image_list, labels=None, transform=None, target_transform=None, mode='RGB'):
-        
-        self.ra_obj = RandAugment()
+        # self.ra_obj = autoaugment.RandAugment()
+        #self.ra_obj = RandAugment(2,9)#数据增强
         self.committee_size = 1
         resize_size = 256 
-        crop_size = 224
-        normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        RandomRotate_1 = ts.transforms.RandomRotate(0.5)
+        crop_size = 224 
+        normalize = transforms.Normalize(mean=(0.48145466, 0.4578275, 0.40821073),
+                                   std=[0.26862954, 0.26130258, 0.27577711])
+                                
         self.rf_1 = transforms.Compose([
-                transforms.Resize((resize_size, resize_size)),
-                transforms.RandomCrop(crop_size),
+                transforms.Resize(crop_size, interpolation=Image.BICUBIC),
+                transforms.CenterCrop(crop_size),
                 transforms.ToTensor(),
-                RandomRotate_1,
                 normalize
             ])
         imgs = make_dataset(image_list, labels)
-        # if len(imgs) == 0:
-        #     raise(RuntimeError("Found 0 images in subfolders of: " + root + "\n"
-        #                        "Supported image extensions are: " + ",".join(IMG_EXTENSIONS)))
-
         self.imgs = imgs
         self.transform = transform
         self.target_transform = target_transform
@@ -171,8 +167,7 @@ class ImageList_idx_aug_fix(Dataset):
             target = self.target_transform(target)
 
         img_1 = self.rf_1(img)
-        re_ls = [img_1]
-
+        re_ls = img_1
         return (data, re_ls), target, index
 
     def __len__(self):
