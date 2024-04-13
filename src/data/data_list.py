@@ -133,8 +133,6 @@ class ImageList_idx_aug(Dataset):
 
 class ImageList_idx_aug_fix(Dataset):
     def __init__(self, image_list, labels=None, transform=None, target_transform=None, mode='RGB'):
-        # self.ra_obj = autoaugment.RandAugment()
-        #self.ra_obj = RandAugment(2,9)#数据增强
         self.committee_size = 1
         resize_size = 256 
         crop_size = 224 
