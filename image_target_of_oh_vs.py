@@ -92,10 +92,6 @@ if __name__ == "__main__":
         print("using adacontrast method")
         acc = ADACONTRAST.train_target(cfg)
 
-    elif cfg.MODEL.METHOD == "adacontrast":
-        print("using adacontrast method")
-        acc = ADACONTRAST.train_target(cfg)
-
     elif cfg.MODEL.METHOD == "source":
         print("training source model")
         acc = SOURCE.train_source(cfg)
