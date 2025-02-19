@@ -28,4 +28,4 @@ DIFO:
   LOAD : None
   IIC_PAR: 1.0
   GENT_PAR : 1.0
-  LENT_PAR : 0.05
+  LENT_PAR : 0.1
