@@ -262,7 +262,7 @@ _C.TSD.ARCH = 'ViT-B/32' #['RN50', 'ViT-B/32','RN101','ViT-B/16']
 _C.TSD.TTA_STEPS = 1
 _C.TSD.IIC_PAR = 1.0
 _C.TSD.LOAD = None
-_C.DIFO.LENT_PAR = 0.05
+_C.TSD.LENT_PAR = 0.05
 # --------------------------------- CUDNN options --------------------------- #
 _C.CUDNN = CfgNode()
 
