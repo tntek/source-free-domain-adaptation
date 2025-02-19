@@ -248,6 +248,21 @@ _C.DIFO.ARCH = 'ViT-B/32' #['RN50', 'ViT-B/32','RN101','ViT-B/16']
 _C.DIFO.TTA_STEPS = 1
 _C.DIFO.IIC_PAR = 1.0
 _C.DIFO.LOAD = None
+# --------------------------------- TSD options ----------------------------- #
+_C.TSD = CfgNode()
+
+_C.TSD.CLS_PAR = 0.4
+_C.TSD.ENT = True
+_C.TSD.GENT = True
+_C.TSD.EPSILON = 1e-5
+_C.TSD.GENT_PAR = 1.0
+_C.TSD.CTX_INIT = 'a_photo_of_a' #initialize context 
+_C.TSD.N_CTX = 4 
+_C.TSD.ARCH = 'ViT-B/32' #['RN50', 'ViT-B/32','RN101','ViT-B/16']
+_C.TSD.TTA_STEPS = 1
+_C.TSD.IIC_PAR = 1.0
+_C.TSD.LOAD = None
+_C.DIFO.LENT_PAR = 0.05
 # --------------------------------- CUDNN options --------------------------- #
 _C.CUDNN = CfgNode()
 
