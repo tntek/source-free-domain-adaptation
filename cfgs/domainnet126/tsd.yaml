@@ -1,6 +1,6 @@
 MODEL:
   ARCH: resnet50
-  METHOD: difo
+  METHOD: tsd
 SETTING:
   DATASET: domainnet126
   S: 0
