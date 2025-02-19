@@ -86,7 +86,7 @@ if __name__ == "__main__":
             acc = DIFO.train_target(cfg)
 
     elif cfg.MODEL.METHOD == "tsd":
-        print("using plue method")
+        print("using tsd method")
         acc = TSD.train_target(cfg)
 
     elif cfg.MODEL.METHOD == "plue":
