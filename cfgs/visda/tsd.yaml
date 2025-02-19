@@ -1,6 +1,6 @@
 MODEL:
   ARCH: resnet101
-  METHOD: difo
+  METHOD: tsd
 SETTING:
   DATASET: VISDA-C
   S: 0
