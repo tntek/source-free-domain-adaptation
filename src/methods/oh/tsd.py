@@ -7,14 +7,13 @@ from torchvision import transforms
 from src.utils import loss,prompt_tuning,IID_losses
 from src.models import network
 from torch.utils.data import DataLoader
-from src.data.data_list import  ImageList_idx
+from src.data.data_list import  ImageList_idx,ImageList_idx_aug_fix
 from sklearn.metrics import confusion_matrix
 import clip
 from src.utils.utils import *
 from src.utils.loss import entropy
+
 logger = logging.getLogger(__name__)
-
-
 
 def data_load(cfg): 
     ## prepare data
@@ -41,9 +40,9 @@ def data_load(cfg):
                     new_tar.append(line)
         txt_tar = new_tar.copy()
         txt_test = txt_tar.copy()
-    dsets["target"] = ImageList_idx(txt_tar, transform=image_train())
+    dsets["target"] = ImageList_idx_aug_fix(txt_tar, transform=image_train())
     dset_loaders["target"] = DataLoader(dsets["target"], batch_size=train_bs, shuffle=True, num_workers=cfg.NUM_WORKERS, drop_last=False)
-    dsets["test"] = ImageList_idx(txt_test, transform=image_test())
+    dsets["test"] = ImageList_idx_aug_fix(txt_test, transform=image_test())
     dset_loaders["test"] = DataLoader(dsets["test"], batch_size=train_bs*3, shuffle=False, num_workers=cfg.NUM_WORKERS, drop_last=False)
     return dset_loaders
 
@@ -51,8 +50,7 @@ def image_test(resize_size=256, crop_size=224, alexnet=False):
   if not alexnet:
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                    std=[0.229, 0.224, 0.225])
-  #else:
-    #normalize = Normalize(meanfile='./ilsvrc_2012_mean.npy')
+
   return  transforms.Compose([
         transforms.Resize((resize_size, resize_size)),
         transforms.CenterCrop(crop_size),
@@ -63,8 +61,7 @@ def image_train(resize_size=256, crop_size=224, alexnet=False):
   if not alexnet:
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                    std=[0.229, 0.224, 0.225])
-  #else:
-   # normalize = Normalize(meanfile='./ilsvrc_2012_mean.npy')
+
   return  transforms.Compose([
         transforms.Resize((resize_size, resize_size)),
         transforms.RandomCrop(crop_size),
@@ -87,7 +84,7 @@ def cal_acc(loader, netF, netB, netC, flag=False):
         iter_test = iter(loader)
         for i in range(len(loader)):
             data = next(iter_test)
-            inputs = data[0]
+            inputs = data[0][0]
             labels = data[1]
             inputs = inputs.cuda()
             outputs = netC(netB(netF(inputs)))
@@ -119,7 +116,7 @@ def op_copy(optimizer):
         param_group['lr0'] = param_group['lr']
     return optimizer
 
-def print_cfg(cfg):
+def print_args(cfg):
     s = "==========================================\n"
     for arg, content in cfg.__dict__.items():
         s += "{}:{}\n".format(arg, content)
@@ -131,6 +128,7 @@ def train_target(cfg):
     clip_model.float()
     text_inputs = clip_pre_text(cfg)
     dset_loaders = data_load(cfg)
+
     ## set base network
     if cfg.MODEL.ARCH[0:3] == 'res':
         netF = network.ResBase(res_name=cfg.MODEL.ARCH).cuda()
@@ -177,17 +175,17 @@ def train_target(cfg):
         iter_test = iter(loader)
         for i in range(len(loader)):
             data = next(iter_test)
-            inputs = data[0]
+            inputs = data[0][0]
             indx=data[-1]
             inputs = inputs.cuda()
             output = netB(netF(inputs))
             outputs = netC(output)
             outputs=nn.Softmax(dim=1)(outputs)
             score_bank[indx] = outputs.detach().clone()
-
+            
             source_score = -torch.sum(outputs * torch.log(outputs + 1e-9), dim=1).mean()
             source_score_bank[indx] = source_score.detach().clone()
-
+    
     max_iter = cfg.TEST.MAX_EPOCH * len(dset_loaders["target"])
     interval_iter = max_iter // cfg.TEST.INTERVAL
     iter_num = 0
@@ -195,11 +193,10 @@ def train_target(cfg):
 
     while iter_num < max_iter:
         try:
-            inputs_test, _, tar_idx = next(iter_test)
+            (inputs_test, _), _, tar_idx = next(iter_test)
         except:
             iter_test = iter(dset_loaders["target"])
-            inputs_test, _, tar_idx = next(iter_test)
-
+            (inputs_test, _), _, tar_idx = next(iter_test)
         if inputs_test.size(0) == 1:
             continue
 
@@ -209,8 +206,8 @@ def train_target(cfg):
             netC.eval()
             epoch_num = int(iter_num/interval_iter)
             confi_imag,confi_dis,clip_all_output, target_score_bank = obtain_label(dset_loaders['test'], netF, netB, netC,text_inputs,text_features,clip_model)
-            clip_all_output = clip_all_output.cuda()
             target_score_bank = target_score_bank.cuda()
+            clip_all_output = clip_all_output.cuda()
             text_features = prompt_tuning.prompt_main(cfg,confi_imag,confi_dis,iter_num)
             cfg.load = 'prompt_model.pt'
             netF.train()
@@ -235,10 +232,6 @@ def train_target(cfg):
         predict_one = np.eye(K)[predict.cpu()]
         clip_one = np.eye(K)[clip_predict.cpu()]
 
-        data = data.numpy()
-        predict_mix = data*predict_one + (1-data)*clip_one
-        predict_mix = torch.from_numpy(predict_mix).cuda()
-
         source_score_bank[tar_idx] = 0.99*source_score_bank[tar_idx] + 0.01*target_score_bank[tar_idx]
         current_batch_scores = source_score_bank[tar_idx]
         avg_score = current_batch_scores.mean().item()
@@ -250,6 +243,10 @@ def train_target(cfg):
         loss_ent = entropy(softmax_out , avg_score, margin)
         mask_greater = diff > margin
         indices_greater = torch.where(mask_greater)[0]
+
+        data = data.numpy()
+        predict_mix = data*predict_one + (1-data)*clip_one
+        predict_mix = torch.from_numpy(predict_mix).cuda()
 
         if cfg.TSD.CLS_PAR > 0:
             targets = predict_mix[indices_greater]
@@ -266,7 +263,7 @@ def train_target(cfg):
         msoftmax = softmax_out.mean(dim=0)
 
         gentropy_loss = torch.sum(-msoftmax * torch.log(msoftmax + cfg.LCFD.EPSILON))
-        classifier_loss = classifier_loss - cfg.TSD.GENT_PAR * gentropy_loss + cfg.TSD.LENT_PAR * loss_ent
+        classifier_loss = classifier_loss - cfg.TSD.GENT_PAR * gentropy_loss
         with torch.no_grad():
             score_bank[tar_idx] = softmax_out.detach().clone()
 
@@ -296,7 +293,7 @@ def train_target(cfg):
     return netF, netB, netC
 
 
-def print_cfg(cfg):
+def print_args(cfg):
     s = "==========================================\n"    
     for arg, content in cfg.__dict__.items():
         s += "{}:{}\n".format(arg, content)
@@ -309,34 +306,28 @@ def obtain_label(loader, netF, netB, netC,text_inputs,text_features,clip_model):
         iter_test = iter(loader)
         for _ in range(len(loader)):
             data = next(iter_test)
-            inputs = data[0]
+            inputs = data[0][0]
+            inputs_clip = data[0][1]
             labels = data[1]
-            inputs = inputs.cuda() 
+            inputs = inputs.cuda()
+            inputs_clip = inputs_clip.cuda() 
             feas = netB(netF(inputs)) 
             outputs = netC(feas)
-
-            output_soft = nn.Softmax(dim=1)(outputs)
-            scores = -torch.sum(output_soft * torch.log(output_soft + 1e-9), dim=1)
-
             if (text_features!=None):
-                clip_score = clip_text(clip_model,text_features,inputs)
+                clip_score = clip_text(clip_model,text_features,inputs_clip)
             else :
-                clip_score,_ = clip_model(inputs, text_inputs)
-
+                clip_score,_ = clip_model(inputs_clip, text_inputs)
+                
             clip_score = clip_score.cpu()
-            scores = scores.cpu()
-
             if start_test:
                 all_output = outputs.float().cpu()
                 all_clip_score = clip_score.float().cpu()
                 all_label = labels.float().cpu()
-                all_scores = scores.float().cpu()
                 start_test = False
             else:
                 all_output = torch.cat((all_output, outputs.float().cpu()), 0)
                 all_label = torch.cat((all_label, labels.float()), 0)
                 all_clip_score = torch.cat((all_clip_score, clip_score.float()), 0)
-                all_scores = torch.cat((all_scores, scores.float()),0)
                 
     clip_all_output = nn.Softmax(dim=1)(all_clip_score).cpu()
     _, predict_clip = torch.max(clip_all_output, 1)  
@@ -351,7 +342,7 @@ def obtain_label(loader, netF, netB, netC,text_inputs,text_features,clip_model):
     accuracy = torch.sum(torch.squeeze(predict).float() == all_label).item() / float(all_label.size()[0])
     log_str = 'Accuracy = {:.2f}% -> CLIP_Accuracy  = {:.2f}%'.format(accuracy * 100, accuracy_clip * 100)
     logging.info(log_str)
-    return confi_imag,confi_dis,clip_all_output, all_scores
+    return confi_imag,confi_dis,clip_all_output
 
 def clip_pre_text(cfg):
     List_rd = []
