@@ -21,7 +21,7 @@ We encourage contributions! Pull requests to add methods are very welcome and ap
 - [**ARXIV'24**][Unified Source-Free Domain Adaptation (LCFD)](https://arxiv.org/abs/2403.07601), and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/lcfd.py)
 
 - [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model](https://arxiv.org/abs/2311.16510v3), [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/difo.py), and [*Chinese version*](https://zhuanlan.zhihu.com/p/687080854)
-- [**Underveiw**][Source-Free Domain Adaptation with Task-Specific Multimodal Knowledge Distillation](https://arxiv.org/abs/2311.16510v3), [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/tsd.py)
+- [**Underveiw**][Source-Free Domain Adaptation with Task-Specific Multimodal Knowledge Distillation](https://drive.google.com/file/d/1VL5HKkG5WF0yIPhjcuFFidF3JDhiVW5s/view?usp=drive_link), [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/tsd.py)
 - [**IJCV'23**][Source-Free Domain Adaptation via Target Prediction Distribution Searching](https://link.springer.com/article/10.1007/s11263-023-01892-w) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/tpds.py)
 
 - [**TMM'23**][Progressive Source-Aware Transformer for Generalized Source-Free Domain Adaptation](https://ieeexplore.ieee.org/abstract/document/10269002) and [*Code*](https://github.com/tntek/PSAT-GDA)
