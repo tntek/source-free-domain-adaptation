@@ -12,6 +12,7 @@ import src.methods.net.tpds as TPDS
 import src.methods.net.lcfd as LCFD
 import src.methods.net.difo as DIFO
 import src.methods.net.tsd as TSD
+import src.methods.net.ProDe as ProDe
 import src.methods.net.plue as PLUE
 import src.methods.net.adacontrast as ADACONTRAST
 import src.methods.net.source as SOURCE
@@ -78,6 +79,10 @@ if __name__ == "__main__":
     elif cfg.MODEL.METHOD == "tsd":
         print("using tsd method")
         acc = TSD.train_target(cfg)
+
+    elif cfg.MODEL.METHOD == "ProDe":
+        print("using ProDe method")
+        acc = ProDe.train_target(cfg)
 
     elif cfg.MODEL.METHOD == "plue":
         print("using plue method")
