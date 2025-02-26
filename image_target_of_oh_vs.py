@@ -12,6 +12,7 @@ import src.methods.oh.tpds as TPDS
 import src.methods.oh.nrc_vs as Nrc_vs
 import src.methods.oh.lcfd as LCFD
 import src.methods.oh.difo as DIFO
+import src.methods.oh.ProDe as ProDe
 import src.methods.oh.tsd as TSD
 import src.methods.oh.difo_50 as DIFO_50
 
@@ -88,6 +89,10 @@ if __name__ == "__main__":
     elif cfg.MODEL.METHOD == "tsd":
         print("using tsd method")
         acc = TSD.train_target(cfg)
+    elif cfg.MODEL.METHOD == "ProDe":
+        print("using ProDe method")
+        acc = ProDe.train_target(cfg)
+
 
     elif cfg.MODEL.METHOD == "plue":
         print("using plue method")
