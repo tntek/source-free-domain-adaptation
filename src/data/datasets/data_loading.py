@@ -12,7 +12,7 @@ import pickle
 from .Dataset_Idx import Dataset_Idx
 
 from conf import complete_data_dir_path
-from src.data.datasets.imagelist_dataset import ImageList
+from src.data.datasets.imagelist_dataset import ImageList, ImageList_idx_aug_fix
 from src.data.datasets.imagenet_subsets import create_imagenet_subset, class_mapping_164_to_109
 from src.data.datasets.corruptions_datasets import create_cifarc_dataset, create_imagenetc_dataset
 from src.data.datasets.imagenet_d_utils import create_symlinks_and_get_imagenet_visda_mapping
@@ -116,6 +116,30 @@ def get_test_loader(adaptation, dataset_name, root_dir, domain_name,rng_seed, ba
 
     return torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=workers, drop_last=False)
 
+def get_test_loader_aug(adaptation, dataset_name, root_dir, domain_name, rng_seed, batch_size=128, shuffle=False, workers=4):
+
+    # Fix seed again to ensure that the test sequence is the same for all methods
+    random.seed(rng_seed)
+    np.random.seed(rng_seed)
+
+    data_dir = complete_data_dir_path(root=root_dir, dataset_name=dataset_name)
+    transform = get_transform(dataset_name, adaptation)
+
+    # create the test dataset
+    if domain_name == "none":
+        test_dataset, _ = get_source_loader(dataset_name, root_dir, adaptation, batch_size, train_split=False)
+    else:
+        if dataset_name in {"imagenet_k", "imagenet_r", "imagenet_a","imagenet_v"}:
+            test_dataset = torchvision.datasets.ImageFolder(root=data_dir, transform=transform)
+        elif dataset_name in {"domainnet126"}:
+            data_files = [os.path.join("./data", f"{dataset_name}", domain_name + "_list.txt")]
+            test_dataset = ImageList_idx_aug_fix(image_root=data_dir,
+                                     label_files=data_files,
+                                     transform=transform)
+        else:
+            raise ValueError(f"Dataset '{dataset_name}' is not supported!")
+
+    return torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=workers, drop_last=False)
 
 def get_source_loader(dataset_name, root_dir, adaptation, batch_size, train_split=True, ckpt_path=None, num_samples=None, percentage=1.0, workers=4):
     # create the name of the corresponding source dataset
