@@ -263,6 +263,19 @@ _C.TSD.TTA_STEPS = 1
 _C.TSD.IIC_PAR = 1.0
 _C.TSD.LOAD = None
 _C.TSD.LENT_PAR = 0.05
+# --------------------------------- ProDe options ----------------------------- #
+_C.ProDe = CfgNode()
+
+_C.ProDe.ENT = True
+_C.ProDe.GENT = True
+_C.ProDe.EPSILON = 1e-5
+_C.ProDe.GENT_PAR = 0.1
+_C.ProDe.CTX_INIT = 'a_photo_of_a' #initialize context 
+_C.ProDe.N_CTX = 4 
+_C.ProDe.ARCH = 'ViT-B/32' #['RN50', 'ViT-B/32','RN101','ViT-B/16']
+_C.ProDe.TTA_STEPS = 1
+_C.ProDe.IIC_PAR = 1.3
+_C.ProDe.LOAD = None
 # --------------------------------- CUDNN options --------------------------- #
 _C.CUDNN = CfgNode()
 
