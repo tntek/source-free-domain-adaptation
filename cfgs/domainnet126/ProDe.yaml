@@ -2,7 +2,7 @@ MODEL:
   ARCH: resnet50
   METHOD: ProDe
 SETTING:
-  DATASET: office-home
+  DATASET: domainnet126
   S: 0
   T: 1
   SEED: 2020
