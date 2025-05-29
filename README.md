@@ -83,7 +83,7 @@ CUDA_VISIBLE_DEVICES=0 python image_target_of_oh_vs.py --cfg "cfgs/office-home/s
 
 - For adapting to ImageNet variations, all pre-trained models available in [Torchvision](https://pytorch.org/vision/0.14/models.html) or [timm](https://github.com/huggingface/pytorch-image-models/tree/v0.6.13) can be used.
 
-- We also provide the pre-trained source models which can be downloaded from [here](https://drive.google.com/drive/folders/17n6goPXw_-ERgTK8R8nm4M_8PJPTEK1j?usp=sharing).
+- We also provide the pre-trained source models which can be downloaded from [here](https://drive.google.com/drive/folders/1-2ROsqftoto_5XHmj_Ubu7POV-V0Q69x?usp=sharing).
 
 ### Target
 After obtaining the source models, modify the `${CKPT_DIR}` in the `conf.py` to your source model directory. For office-31, office-home and VISDA-C, simply run the following Python file with the corresponding config file to execute source-free domain adaptation.
