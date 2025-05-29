@@ -9,7 +9,7 @@ import src.methods.net.sclm as SCLM
 import src.methods.net.cowa as COWA
 import src.methods.net.gkd as GKD
 import src.methods.net.tpds as TPDS
-import src.methods.net.lcfd as LCFD
+import src.methods.net.CausalDA as CausalDA
 import src.methods.net.difo as DIFO
 import src.methods.net.tsd as TSD
 import src.methods.net.ProDe as ProDe
@@ -68,9 +68,9 @@ if __name__ == "__main__":
         print("using tpds method")
         acc = TPDS.train_target(cfg)
 
-    elif cfg.MODEL.METHOD == "lcfd":
-        print("using lcfd method")
-        acc = LCFD.train_target(cfg)
+    elif cfg.MODEL.METHOD == "CausalDA":
+        print("using CausalDA method")
+        acc = CausalDA.train_target(cfg)
 
     elif cfg.MODEL.METHOD == "difo":
         print("using difo method")
