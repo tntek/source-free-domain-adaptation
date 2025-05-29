@@ -1,6 +1,6 @@
 MODEL:
   ARCH: resnet50
-  METHOD: lcfd
+  METHOD: CausalDA
 SETTING:
   DATASET: imagenet_v
   S: 0
@@ -18,7 +18,7 @@ TEST:
   BATCH_SIZE: 64
   MAX_EPOCH: 15
   INTERVAL: 15
-LCFD:
+CausalDA:
   CLS_PAR: 0.4
   ENT: TRUE
   GENT: TRUE
