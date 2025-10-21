@@ -217,7 +217,6 @@ def train_target(cfg):
             inputs = inputs.cuda()
             output = netB(netF(inputs))
             outputs = netC(output)
-            outputs=nn.Softmax(dim=1)(outputs)
             logtis_bank[indx] = outputs.detach().clone()
 
 
