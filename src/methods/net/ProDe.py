@@ -149,7 +149,6 @@ def train_target(cfg):
             indx=data[-1]
             inputs = inputs.cuda()
             outputs = base_model(inputs)
-            outputs=nn.Softmax(dim=1)(outputs)
             logtis_bank[indx] = outputs.detach().clone()
 
     max_iter = cfg.TEST.MAX_EPOCH * len(target_data_loader)
