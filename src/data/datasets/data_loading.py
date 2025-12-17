@@ -90,8 +90,101 @@ def get_transform(dataset_name, adaptation):
 
     return transform
 
+def get_test_loader_p(setting, adaptation, dataset_name, root_dir, domain_name, severity, num_examples,
+                    domain_names_all, rng_seed, alpha_dirichlet=0, batch_size=128, shuffle=False, workers=4,trans=None):
 
-def get_test_loader(adaptation, dataset_name, root_dir, domain_name,rng_seed, batch_size=128, shuffle=False, workers=4):
+    # Fix seed again to ensure that the test sequence is the same for all methods
+    random.seed(rng_seed)
+    np.random.seed(rng_seed)
+
+    data_dir = complete_data_dir_path(root=root_dir, dataset_name=dataset_name)
+    # transform = get_transform(dataset_name, adaptation)
+    transform = trans
+
+    # create the test dataset
+    if domain_name == "none":
+        test_dataset, _ = get_source_loader(dataset_name, root_dir, adaptation, batch_size, train_split=False)
+    else:
+        if dataset_name in {"cifar10_c", "cifar100_c"}:
+            test_dataset = create_cifarc_dataset(dataset_name=dataset_name,
+                                                 severity=severity,
+                                                 data_dir=data_dir,
+                                                 corruption=domain_name,
+                                                 corruptions_seq=domain_names_all,
+                                                 transform=transform,
+                                                 setting=setting)
+                                                 
+            # ImageList_idx(txt_tar, transform=transform)
+
+        elif dataset_name == "imagenet_c":
+            # test_dataset = create_imagenetc_dataset(n_examples=num_examples,
+            #                                         severity=severity,
+            #                                         data_dir=data_dir,
+            #                                         corruption=domain_name,
+            #                                         corruptions_seq=domain_names_all,
+            #                                         transform=transform,
+            #                                         setting=setting)
+            ckpt = './ckpt/Datasets'
+            teset, _ =  load_imagenet_c(root=os.path.join(root_dir, 'ImageNet-C'), batch_size=batch_size, corruption=domain_name,
+                               level=severity, workers=workers,
+                               transforms=transform, ckpt=ckpt)
+            dataset_idx = Dataset_Idx(teset)
+            data_loader = torch.utils.data.DataLoader(dataset_idx, batch_size=batch_size, shuffle=shuffle, num_workers=workers,
+                                                    drop_last=False)
+            return data_loader
+        elif dataset_name in {"imagenet_k", "imagenet_r", "imagenet_a","imagenet_v"}:
+            test_dataset = torchvision.datasets.ImageFolder(root=data_dir, transform=transform)
+        elif dataset_name in {"imagenet_d", "imagenet_d109", "domainnet126", "office31", "visda"}:
+            # create the symlinks needed for imagenet-d variants
+            if dataset_name in {"imagenet_d", "imagenet_d109"}:
+                for dom_name in domain_names_all:
+                    if not os.path.exists(os.path.join(data_dir, dom_name)):
+                        logger.info(f"Creating symbolical links for ImageNet-D {dom_name}...")
+                        domainnet_dir = os.path.join(complete_data_dir_path(root=root_dir, dataset_name="domainnet126"), dom_name)
+                        create_symlinks_and_get_imagenet_visda_mapping(domainnet_dir, map_dict)
+
+            # prepare a list containing all paths of the image-label-files
+            if "mixed_domains" in setting:
+                data_files = [os.path.join("datasets", f"{dataset_name}_lists", dom_name + "_list.txt") for dom_name in domain_names_all]
+            else:
+                data_files = [os.path.join("src/data/datasets", f"{dataset_name}_lists", domain_name + "_list.txt")]
+
+            test_dataset = ImageList_idx_aug_fix(image_root=data_dir,
+                                     label_files=data_files,
+                                     transform=transform)
+        else:
+            raise ValueError(f"Dataset '{dataset_name}' is not supported!")
+
+    try:
+        # shuffle the test sequence; deterministic behavior for a fixed random seed
+        # random.shuffle(test_dataset.samples)
+
+        # randomly subsample the dataset if num_examples is specified
+        if num_examples != -1:
+            num_samples_orig = len(test_dataset)
+            # logger.info(f"Changing the number of test samples from {num_samples_orig} to {num_examples}...")
+            test_dataset.samples = random.sample(test_dataset.samples, k=min(num_examples, num_samples_orig))
+
+        # prepare samples with respect to the considered setting
+        if "mixed_domains" in setting:
+            logger.info(f"Successfully mixed the file paths of the following domains: {domain_names_all}")
+
+        if "correlated" in setting:
+            # sort the file paths by label
+            if alpha_dirichlet > 0:
+                logger.info(f"Using Dirichlet distribution with alpha={alpha_dirichlet} to temporally correlated samples by class labels...")
+                test_dataset.samples = sort_by_dirichlet(alpha_dirichlet, samples=test_dataset.samples)
+            else:
+                # sort the class labels by ascending order
+                logger.info(f"Sorting the file paths by class labels...")
+                test_dataset.samples.sort(key=lambda x: x[1])
+    except AttributeError:
+        logger.warning("Attribute 'samples' is missing. Continuing without shuffling, sorting or subsampling the files...")
+
+    return torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=workers, drop_last=False)
+
+
+def get_test_loader(adaptation, dataset_name, root_dir, domain_name, rng_seed, batch_size=128, shuffle=False, workers=4):
 
     # Fix seed again to ensure that the test sequence is the same for all methods
     random.seed(rng_seed)
@@ -115,6 +208,7 @@ def get_test_loader(adaptation, dataset_name, root_dir, domain_name,rng_seed, ba
             raise ValueError(f"Dataset '{dataset_name}' is not supported!")
 
     return torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=workers, drop_last=False)
+
 
 def get_test_loader_aug(adaptation, dataset_name, root_dir, domain_name, rng_seed, batch_size=128, shuffle=False, workers=4):
 
@@ -140,6 +234,7 @@ def get_test_loader_aug(adaptation, dataset_name, root_dir, domain_name, rng_see
             raise ValueError(f"Dataset '{dataset_name}' is not supported!")
 
     return torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=workers, drop_last=False)
+
 
 def get_source_loader(dataset_name, root_dir, adaptation, batch_size, train_split=True, ckpt_path=None, num_samples=None, percentage=1.0, workers=4):
     # create the name of the corresponding source dataset
