@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix
 import clip
 from clip.custom_clip import get_coop
 from src.utils.utils import *
-from src.data.datasets.data_loading import get_test_loader, get_test_loader_aug
+from src.data.datasets.data_loading import get_test_loader, get_test_loader_aug, get_test_loader_p
 from src.data.datasets.imagenet_subsets import IMAGENET_A_MASK, IMAGENET_R_MASK,IMAGENET_V_MASK
 from src.models.model import *
 from data.imagnet_prompts import imagenet_classes
@@ -31,7 +31,7 @@ def cal_acc(loader, base_model, flag=False):
         for i in range(len(loader)):
             data = next(iter_test)
             inputs = data[0]
-            labels = data[1]
+            labels = data[2]
             inputs = inputs.cuda()
             outputs = base_model(inputs)
             if start_test:
@@ -64,7 +64,6 @@ def op_copy(optimizer):
 
 def train_target(cfg):
     text_inputs = clip_pre_text(cfg)
-    model = get_coop(cfg.ProDe.ARCH, cfg.SETTING.DATASET, int(cfg.GPU_ID), cfg.ProDe.N_CTX, cfg.ProDe.CTX_INIT)
     
     if 'image' in cfg.SETTING.DATASET:
         if cfg.MODEL.ARCH[0:3] == 'res':
@@ -89,13 +88,24 @@ def train_target(cfg):
         base_model = get_model(cfg, cfg.class_num)
     base_model = base_model.cuda()
 
+    model = get_coop(cfg.ProDe.ARCH, cfg.SETTING.DATASET, int(cfg.GPU_ID), cfg.ProDe.N_CTX, cfg.ProDe.CTX_INIT)
+    for name, param in model.named_parameters():
+        if "prompt_learner" not in name:
+            param.requires_grad_(False)
+
+    if cfg.MODEL.ARCH[0:3] == 'res':
+        netF = network.ResBase(res_name=cfg.MODEL.ARCH).cuda()
+    elif cfg.MODEL.ARCH[0:3] == 'vgg':
+        netF = network.VGGBase(vgg_name=cfg.MODEL.ARCH).cuda()  
+
     param_group = []
     param_group_ib = []
     for k, v in base_model.named_parameters():
-        if 'netC' in k or 'fc' in k:
-            v.requires_grad = False
-        else:
+        # if 'netC' in k or 'fc' in k:
+        #     v.requires_grad = False
+        # else:
             param_group += [{'params': v, 'lr': cfg.OPTIM.LR}]
+
     for k, v in model.prompt_learner.named_parameters():
         if(v.requires_grad == True):
             param_group_ib += [{'params': v, 'lr': cfg.OPTIM.LR * cfg.OPTIM.LR_DECAY1}]
@@ -110,32 +120,75 @@ def train_target(cfg):
 
     cfg.ADAPTATION = 'tent'
     domain_name = cfg.domain[cfg.SETTING.T]
-    target_data_loader = get_test_loader_aug(adaptation=cfg.ADAPTATION,
+    # target_data_loader = get_test_loader_aug(adaptation=cfg.ADAPTATION,
+    #                                     dataset_name=cfg.SETTING.DATASET,
+    #                                     root_dir=cfg.DATA_DIR,
+    #                                     domain_name=domain_name,
+    #                                     rng_seed=cfg.SETTING.SEED,
+    #                                     batch_size=cfg.TEST.BATCH_SIZE,
+    #                                     shuffle=True,
+    #                                     workers=cfg.NUM_WORKERS)
+
+    # test_data_loader = get_test_loader_aug(adaptation=cfg.ADAPTATION,
+    #                                 dataset_name=cfg.SETTING.DATASET,
+    #                                 root_dir=cfg.DATA_DIR,
+    #                                 domain_name=domain_name,
+    #                                 rng_seed=cfg.SETTING.SEED,
+    #                                 batch_size=cfg.TEST.BATCH_SIZE*3,
+    #                                 shuffle=False,
+    #                                 workers=cfg.NUM_WORKERS)
+    
+    # source_data_loader = get_test_loader_aug(adaptation=cfg.ADAPTATION,
+    #                                 dataset_name=cfg.SETTING.DATASET,
+    #                                 root_dir=cfg.DATA_DIR,
+    #                                 domain_name=domain_name,
+    #                                 rng_seed=cfg.SETTING.SEED,
+    #                                 batch_size=cfg.TEST.BATCH_SIZE*3,
+    #                                 shuffle=False,
+    #                                 workers=cfg.NUM_WORKERS)
+
+    target_data_loader = get_test_loader_p(setting='reset_each_shift',
+                                        adaptation=cfg.ADAPTATION,
                                         dataset_name=cfg.SETTING.DATASET,
                                         root_dir=cfg.DATA_DIR,
                                         domain_name=domain_name,
+                                        severity=5,
+                                        num_examples=-1,
                                         rng_seed=cfg.SETTING.SEED,
+                                        domain_names_all=cfg.domain,
+                                        alpha_dirichlet=0.0,
                                         batch_size=cfg.TEST.BATCH_SIZE,
                                         shuffle=True,
-                                        workers=cfg.NUM_WORKERS)
+                                        workers=cfg.NUM_WORKERS,trans = image_train())
 
-    test_data_loader = get_test_loader(adaptation=cfg.ADAPTATION,
+
+    test_data_loader = get_test_loader_p(setting='reset_each_shift',
+                                    adaptation=cfg.ADAPTATION,
                                     dataset_name=cfg.SETTING.DATASET,
                                     root_dir=cfg.DATA_DIR,
                                     domain_name=domain_name,
+                                    severity=5,
+                                    num_examples=-1,
                                     rng_seed=cfg.SETTING.SEED,
+                                    domain_names_all=cfg.domain,
+                                    alpha_dirichlet=0.0,
                                     batch_size=cfg.TEST.BATCH_SIZE*3,
                                     shuffle=False,
-                                    workers=cfg.NUM_WORKERS)
+                                    workers=cfg.NUM_WORKERS,trans = image_test())
     
-    source_data_loader = get_test_loader(adaptation=cfg.ADAPTATION,
-                                        dataset_name=cfg.SETTING.DATASET,
-                                        root_dir=cfg.DATA_DIR,
-                                        domain_name=domain_name,
-                                        rng_seed=cfg.SETTING.SEED,
-                                        batch_size=cfg.TEST.BATCH_SIZE,
-                                        shuffle=False,
-                                        workers=cfg.NUM_WORKERS)
+    source_data_loader = get_test_loader_p(setting='reset_each_shift',
+                                    adaptation=cfg.ADAPTATION,
+                                    dataset_name=cfg.SETTING.DATASET,
+                                    root_dir=cfg.DATA_DIR,
+                                    domain_name=domain_name,
+                                    severity=5,
+                                    num_examples=-1,
+                                    rng_seed=cfg.SETTING.SEED,
+                                    domain_names_all=cfg.domain,
+                                    alpha_dirichlet=0.0,
+                                    batch_size=cfg.TEST.BATCH_SIZE*3,
+                                    shuffle=False,
+                                    workers=cfg.NUM_WORKERS,trans = image_test())
 
 
     num_sample=len(target_data_loader.dataset)
@@ -157,21 +210,20 @@ def train_target(cfg):
 
     while iter_num < max_iter:
         try:
-            inputs_test, inputs_test_augs, _, tar_idx = next(iter_test)
+            inputs_test, inputs_test_augs, target, tar_idx = next(iter_test)
         except:
             iter_test = iter(target_data_loader)
-            inputs_test, inputs_test_augs, _, tar_idx = next(iter_test)
+            inputs_test, inputs_test_augs, target, tar_idx = next(iter_test)
         if inputs_test.size(0) == 1:
             continue
 
         inputs_test = inputs_test.cuda()
-        inputs_test_augs = inputs_test_augs[0].cuda() 
+        inputs_test_augs = inputs_test_augs.cuda() 
 
         iter_num += 1
         lr_scheduler(optimizer, iter_num=iter_num, max_iter=max_iter)
 
 
-        inputs_test = inputs_test.cuda()
         outputs_test = base_model(inputs_test)
         softmax_out = nn.Softmax(dim=1)(outputs_test)
         with torch.no_grad():
@@ -186,7 +238,7 @@ def train_target(cfg):
         clip_score = clip_score.float()
 
         with torch.no_grad():
-            new_clip = (outputs_test_new - 1*logtis_bank[tar_idx].cuda()) + clip_score.cuda()
+            new_clip = (outputs_test_new - 0.1*logtis_bank[tar_idx].cuda()) + clip_score.cuda()
             clip_score_sm = nn.Softmax(dim=1)(new_clip)
         
         _,clip_index_new = torch.max(new_clip, 1)
