@@ -1,0 +1,37 @@
+MODEL:
+  ARCH: resnet50
+  METHOD: ProDU
+SETTING:
+  DATASET: domainnet126
+  S: 0
+  T: 1
+  SEED: 2020
+  OUTPUT_SRC: source
+OPTIM:
+  METHOD: SGD
+  MOMENTUM: 0.9
+  LR: 1e-3
+  WD: 5e-1
+  NESTEROV: TRUE
+TEST:
+  BATCH_SIZE: 64
+  MAX_EPOCH: 30
+  INTERVAL: 30
+ProDU:
+  EPSILON : 1e-5
+  GENT_PAR: 1.0
+  ARCH : ViT-B/32
+  TTA_STEPS : 1
+  CTX_INIT : a_photo_of_a
+  N_CTX : 4
+  LOAD : None
+  IIC_PAR: 1.0
+  DELTA_LR: 3e-1
+  P_STEPS: 10
+  P_EPSILON: 3.0
+  W: 1.0
+  L: 3.0
+  R: 1.0
+  THRESHOLD: 0.7
+  OUTER: 0.5
+  INNER: 3.0
