@@ -81,7 +81,7 @@ _C.SETTING.S = 0
 _C.SETTING.T = 1
 
 #Seed
-_C.SETTING.SEED = 2021
+_C.SETTING.SEED = 2020
 
 #Sorce model directory
 _C.SETTING.OUTPUT_SRC = 'weight_512/seed2021'
@@ -276,6 +276,27 @@ _C.ProDe.ARCH = 'ViT-B/32' #['RN50', 'ViT-B/32','RN101','ViT-B/16']
 _C.ProDe.TTA_STEPS = 1
 _C.ProDe.IIC_PAR = 1.3
 _C.ProDe.LOAD = None
+# --------------------------------- ProDU options ----------------------------- #
+_C.ProDU = CfgNode()
+
+_C.ProDU.EPSILON = 1e-5
+_C.ProDU.GENT_PAR = 0.1
+_C.ProDU.IIC_PAR = 1.3
+_C.ProDU.DELTA_LR = 5e-1
+_C.ProDU.P_STEPS = 6
+_C.ProDU.P_EPSILON = 3.0
+_C.ProDU.W = 1.0
+_C.ProDU.L = 3.0
+_C.ProDU.R = 1.0
+_C.ProDU.THRESHOLD = 0.7
+_C.ProDU.OUTER = 0.5
+_C.ProDU.INNER = 1.0
+
+_C.ProDU.CTX_INIT = 'a_photo_of_a' #initialize context 
+_C.ProDU.N_CTX = 4 
+_C.ProDU.ARCH = 'ViT-B/32' #['RN50', 'ViT-B/32','RN101','ViT-B/16']
+_C.ProDU.TTA_STEPS = 1
+_C.ProDU.LOAD = None
 # --------------------------------- CUDNN options --------------------------- #
 _C.CUDNN = CfgNode()
 
