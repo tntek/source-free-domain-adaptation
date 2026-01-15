@@ -21,7 +21,9 @@ It is also the official repository for the following works:
 
 This repository is also supports the following methods:
   - Source, [SHOT](http://proceedings.mlr.press/v119/liang20a/liang20a.pdf),
-  [NRC](https://proceedings.neurips.cc/paper_files/paper/2021/file/f5deaeeae1538fb6c45901d524ee2f98-Paper.pdf), [COWA](https://proceedings.mlr.press/v162/lee22c/lee22c.pdf), [AdaContrast](https://openaccess.thecvf.com/content/CVPR2022/papers/Chen_Contrastive_Test-Time_Adaptation_CVPR_2022_paper.pdf), [PLUE](https://openaccess.thecvf.com/content/CVPR2023/papers/Litrico_Guiding_Pseudo-Labels_With_Uncertainty_Estimation_for_Source-Free_Unsupervised_Domain_Adaptation_CVPR_2023_paper.pdf), [ProDe](https://arxiv.org/abs/2406.01658), [CausalDA](https://arxiv.org/abs/2403.07601), [DIFO](https://arxiv.org/abs/2311.16510v3), [TPDS](https://link.springer.com/article/10.1007/s11263-023-01892-w), [SCLM](https://www.sciencedirect.com/science/article/pii/S0893608022001897), [GKD](https://ieeexplore.ieee.org/abstract/document/9636206)
+  [NRC](https://proceedings.neurips.cc/paper_files/paper/2021/file/f5deaeeae1538fb6c45901d524ee2f98-Paper.pdf), [COWA](https://proceedings.mlr.press/v162/lee22c/lee22c.pdf), [AdaContrast](https://openaccess.thecvf.com/content/CVPR2022/papers/Chen_Contrastive_Test-Time_Adaptation_CVPR_2022_paper.pdf), [PLUE](https://openaccess.thecvf.com/content/CVPR2023/papers/Litrico_Guiding_Pseudo-Labels_With_Uncertainty_Estimation_for_Source-Free_Unsupervised_Domain_Adaptation_CVPR_2023_paper.pdf), [ProDe](https://arxiv.org/abs/2406.01658), [DIFO](https://arxiv.org/abs/2311.16510v3), [TPDS](https://link.springer.com/article/10.1007/s11263-023-01892-w), [SCLM](https://www.sciencedirect.com/science/article/pii/S0893608022001897), [GKD](https://ieeexplore.ieee.org/abstract/document/9636206)
+
+<!-- [CausalDA](https://arxiv.org/abs/2403.07601) -->
 </details>
 
 We encourage contributions! Pull requests to add methods are very welcome and appreciated.
