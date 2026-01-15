@@ -1,5 +1,12 @@
 # source-free-domain-adaptation
 This is an source-free domain adaptation repository based on PyTorch. It was developed by [Wenxin Su](https://hazelsu.github.io/). If you encounter any issues or have questions, please don't hesitate to contact Wenxin at suwenxin43@gmail.com , baiyunxiang11@gmail.com or guokai063@gmail.com. 
+It is also the official repository for the following works:
+- [**ICLR(Oral)'25**][Proxy Denoising for Source-Free Domain Adaptation (ProDe)](https://arxiv.org/abs/2406.01658)
+- [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model (DIFO)](https://arxiv.org/abs/2311.16510v3)
+- [**IJCV'23**][Source-Free Domain Adaptation via Target Prediction Distribution Searching (TPDS)](https://link.springer.com/article/10.1007/s11263-023-01892-w)
+- [**NN'22**][Semantic consistency learning on manifold for source data-free unsupervised domain adaptation (SCLM)](https://www.sciencedirect.com/science/article/pii/S0893608022001897)
+- [**IROS'21**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation (GKD)](https://ieeexplore.ieee.org/abstract/document/9636206)
+
 <!-- It is also the official repository for the following works:
 - [**ICLR(Oral)'25**][Proxy Denoising for Source-Free Domain Adaptation (ProDe)](https://arxiv.org/abs/2406.01658)
 - [**Underveiw**][Source-Free Domain Adaptation with Task-Specific Multimodal Knowledge Distillation (TSD)] 
@@ -10,6 +17,8 @@ This is an source-free domain adaptation repository based on PyTorch. It was dev
 - [**IROS'21**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation (GKD)](https://ieeexplore.ieee.org/abstract/document/9636206)
 -->
 
+
+
 This repository is also supports the following methods:
   - Source, [SHOT](http://proceedings.mlr.press/v119/liang20a/liang20a.pdf),
   [NRC](https://proceedings.neurips.cc/paper_files/paper/2021/file/f5deaeeae1538fb6c45901d524ee2f98-Paper.pdf), [COWA](https://proceedings.mlr.press/v162/lee22c/lee22c.pdf), [AdaContrast](https://openaccess.thecvf.com/content/CVPR2022/papers/Chen_Contrastive_Test-Time_Adaptation_CVPR_2022_paper.pdf), [PLUE](https://openaccess.thecvf.com/content/CVPR2023/papers/Litrico_Guiding_Pseudo-Labels_With_Uncertainty_Estimation_for_Source-Free_Unsupervised_Domain_Adaptation_CVPR_2023_paper.pdf), [ProDe](https://arxiv.org/abs/2406.01658), [CausalDA](https://arxiv.org/abs/2403.07601), [DIFO](https://arxiv.org/abs/2311.16510v3), [TPDS](https://link.springer.com/article/10.1007/s11263-023-01892-w), [SCLM](https://www.sciencedirect.com/science/article/pii/S0893608022001897), [GKD](https://ieeexplore.ieee.org/abstract/document/9636206)
@@ -17,22 +26,26 @@ This repository is also supports the following methods:
 
 We encourage contributions! Pull requests to add methods are very welcome and appreciated.
 
+## Our Publications
+- [**ICLR(Oral)'25**][Proxy Denoising for Source-Free Domain Adaptation (ProDe)](https://arxiv.org/abs/2406.01658)  and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/ProDe.py).
+- [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model](https://arxiv.org/abs/2311.16510v3), [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/difo.py), and [*Chinese version*](https://zhuanlan.zhihu.com/p/687080854)
+- [**IJCV'23**][Source-Free Domain Adaptation via Target Prediction Distribution Searching](https://link.springer.com/article/10.1007/s11263-023-01892-w) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/tpds.py)
+- [**IEEE-TMM'23**][Progressive Source-Aware Transformer for Generalized Source-Free Domain Adaptation](https://ieeexplore.ieee.org/abstract/document/10269002) and [*Code*](https://github.com/tntek/PSAT-GDA)
+- [**CAAI-TIT'23**][Model adaptation via credible local context representation](https://ietresearch.onlinelibrary.wiley.com/doi/pdf/10.1049/cit2.12228) and [*Code*](https://github.com/tntek/CLCR)
+- [**NN'22**][Semantic consistency learning on manifold for source data-free unsupervised domain adaptation](https://www.sciencedirect.com/science/article/pii/S0893608022001897) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/sclm.py)
+- [**IROS'21**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation](https://ieeexplore.ieee.org/abstract/document/9636206) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/gkd.py)
+
+
 <!-- 
 ## Our Publications
 - [**ICLR(Oral)'25**][Proxy Denoising for Source-Free Domain Adaptation (ProDe)](https://arxiv.org/abs/2406.01658)  and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/ProDe.py).
-
 - [**ARXIV'24**][Unified Source-Free Domain Adaptation (CausalDA)](https://arxiv.org/abs/2403.07601), and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/CausalDA.py)
-
 - [**CVPR'24**][Source-Free Domain Adaptation with Frozen Multimodal Foundation Model](https://arxiv.org/abs/2311.16510v3), [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/difo.py), and [*Chinese version*](https://zhuanlan.zhihu.com/p/687080854)
 - [**Underveiw**][Source-Free Domain Adaptation with Task-Specific Multimodal Knowledge Distillation], [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/tsd.py)
 - [**IJCV'23**][Source-Free Domain Adaptation via Target Prediction Distribution Searching](https://link.springer.com/article/10.1007/s11263-023-01892-w) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/tpds.py)
-
 - [**TMM'23**][Progressive Source-Aware Transformer for Generalized Source-Free Domain Adaptation](https://ieeexplore.ieee.org/abstract/document/10269002) and [*Code*](https://github.com/tntek/PSAT-GDA)
-
 - [**CAAI TRIT'22**][Model adaptation via credible local context representation](https://ietresearch.onlinelibrary.wiley.com/doi/pdf/10.1049/cit2.12228) and [*Code*](https://github.com/tntek/CLCR)
-
 - [**NN'22**][Semantic consistency learning on manifold for source data-free unsupervised domain adaptation](https://www.sciencedirect.com/science/article/pii/S0893608022001897) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/sclm.py)
-
 - [**IROS'21**][Model Adaptation through Hypothesis Transfer with Gradual Knowledge Distillation](https://ieeexplore.ieee.org/abstract/document/9636206) and [*Code*](https://github.com/tntek/source-free-domain-adaptation/blob/main/src/methods/oh/gkd.py)
 -->
 
