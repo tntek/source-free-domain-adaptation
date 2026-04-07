@@ -18,7 +18,7 @@ TEST:
   MAX_EPOCH: 30
   INTERVAL: 30
 ProDe:
-  EPSILON : 1e-5
+  EPSILON : 1e-3
   GENT_PAR: 0.4
   ARCH : ViT-B/32
   TTA_STEPS : 1
